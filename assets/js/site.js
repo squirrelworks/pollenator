@@ -29,8 +29,9 @@ async function GetAll(position) {
     ]);
     const data = await Promise.all(res.map(r => r.json()))
 
-    console.log(data.flat());
-    
+    console.log(data[0]);
+    console.log(data[1]);
+
   } catch {
     throw Error("Promise failed");
   }
