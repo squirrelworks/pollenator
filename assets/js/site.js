@@ -1,5 +1,7 @@
 // write cool JS hwere!!
 
+let map
+
 getLocation();
 
 
@@ -15,8 +17,13 @@ function getLocation() {
 
 async function GetAll(position) {
 
+
+
+
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
+
+    makeMap(latitude, longitude)
 
     let myUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=alder_pollen,birch_pollen,grass_pollen,ragweed_pollen&hourly=alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,ragweed_pollen&timezone=Europe%2FBerlin&domains=cams_europe`;
 
@@ -36,6 +43,25 @@ async function GetAll(position) {
     throw Error("Promise failed");
   }
 };
+
+
+function makeMap(latitude, longitude) {
+
+  let map = L.map('map').setView([latitude, longitude], 13);
+
+  var marker = L.marker([latitude, longitude]).addTo(map);
+  map.on('click', onMapClick);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+}
+
+
+function onMapClick(e) {
+  alert("You clicked the map at " + e.latlng);
+}
 
 
 
