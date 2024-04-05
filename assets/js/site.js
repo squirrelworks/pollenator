@@ -1,11 +1,12 @@
 // write cool JS hwere!!
 
 let map
+let PopUp=false;
 
 getLocation();
 
 
-function getLocation() {
+/* function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(GetAll);
    
@@ -15,7 +16,7 @@ function getLocation() {
 }
 
 
-async function GetAll(position) {
+ async function GetAll(position) {
 
 
 
@@ -42,46 +43,77 @@ async function GetAll(position) {
   } catch {
     throw Error("Promise failed");
   }
-};
+}; */
+ 
 
+ function makeMap(latitude, longitude) {
 
-function makeMap(latitude, longitude) {
+   map = L.map('map').setView([latitude, longitude], 13);
 
-  let map = L.map('map').setView([latitude, longitude], 13);
-
-  var marker = L.marker([latitude, longitude]).addTo(map);
+  //var marker = L.marker([latitude, longitude]).addTo(map);
   map.on('click', onMapClick);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-
 }
+
 
 
 function onMapClick(e) {
-  alert("You clicked the map at " + e.latlng);
+ 
+  //moveMapToMarker(10,10);
+
+ console.log(e.latlng);
+
+
+  
+
+  let myContent=`<p>Hello world!<br />This is a nice popup.</p><button onClick="MapPopupCallBack(${e.latlng.lat},${e.latlng.lng})">ok</button>`
+  PopUp = L.popup(e.latlng, {content: myContent}).openOn(map);
+ 
+  /* var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+  getPollenData(e.latlng.lat,e.latlng.lng)  */ 
+} 
+
+
+function moveMapToMarker(latitude,longitude){
+
+  
+latitude=57.35
+longitude=9.950001
+
+  map.setView([latitude, longitude], 13);
+ 
 }
 
 
 
 
-
-
-
-
-/* function getLocation() {
+ function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(getPollenData);
-    console.log(myPos);
+    navigator.geolocation.getCurrentPosition(positionSucces);
+   
   } else {
     document.getElementById("demo").innerHTML = "Geolocation is not supported";
   }
-} */
+} 
 
-function getPollenData(position) {
+
+
+function positionSucces(position){
+  makeMap(position.coords.latitude, position.coords.longitude);
+  getPollenData(position.coords.latitude, position.coords.longitude)
+
+}
+
+
+function getPollenData(latitude,longitude) {
+
+ 
+/* console.log("get pollen data: "+position);
   var latitude = position.coords.latitude;
-  var longitude = position.coords.longitude;
+  var longitude = position.coords.longitude; */
 
   getLocationName(latitude,longitude);
 
@@ -96,7 +128,8 @@ function getPollenData(position) {
     })
     .then((data) => {
       // Handle the data
-      console.log(data);
+      //console.log(data);
+      PollenDataRecieved(data)
     })
     .catch((error) => {
       // Handle any errors that occurred during the fetch
@@ -120,7 +153,7 @@ function getLocationName(lat,long){
     .then((data) => {
       // Handle the data
       console.log(data.display_name);
-      console.log(data.address.hamlet+' '+data.address.village);
+      //console.log(data.address.hamlet+' '+data.address.village);
     
     })
     .catch((error) => {
@@ -128,5 +161,42 @@ function getLocationName(lat,long){
       console.error("Fetch error:", error);
     });
 
+
+}
+
+
+
+function navCallBack(myNavItem){
+
+  switch (myNavItem) {
+    case "map":
+      console.log("map");
+      break;
+      case "settings":
+      console.log("settings");
+      break;
+      case "home":
+      console.log("home");
+      break;
+      default:
+     
+        break;
+  }
+
+}
+
+function MapPopupCallBack(lat,lng){
+  console.log("pop up");
+  map.closePopup(PopUp)
+  PopUp=false;
+
+  var marker = L.marker([lat,lng]).addTo(map).bindPopup("Saved Location");
+  getPollenData(lat,lng) 
+
+}
+
+function PollenDataRecieved(data){
+
+  console.log(data);
 
 }
