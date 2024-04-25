@@ -28,7 +28,6 @@ function getLocation() {
 
 function positionSucces(position) {
 
- 
   displayMyPos(position.coords.latitude, position.coords.longitude)
 }
 
@@ -38,7 +37,7 @@ function displayMyPos(latitude,longitude){
 
    getLocationName(latitude, longitude)
     .then((data) => {
-      console.table(data);
+      //console.table(data);
 
       currentPositionData = {
         lat: latitude,
@@ -183,6 +182,5 @@ function navCallBack(e) {
 
 
 export default function updatePos(position){
-console.log(position);
 displayMyPos(position.lat,position.lng)
 }

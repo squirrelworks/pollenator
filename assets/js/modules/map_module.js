@@ -12,7 +12,7 @@ let popUpChords;
 let mapElement;
 
 export default function InitializeMap(latitude, longitude, myElement) {
- console.log('i am in initialize map: '+map);
+
   if (!map) {
     mapElement = document.createElement('section')
     mapElement.id = 'map'
