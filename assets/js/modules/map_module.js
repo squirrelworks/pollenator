@@ -5,13 +5,14 @@ CSS and Script must be loaded in this order in HTML
  <!-- Make sure you put this AFTER Leaflet's CSS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 */
-
+import updatePos from '../app.js';
 let map = false
 let PopUp = false;
 let popUpChords;
 let mapElement;
 
 export default function InitializeMap(latitude, longitude, myElement) {
+ console.log('i am in initialize map: '+map);
   if (!map) {
     mapElement = document.createElement('section')
     mapElement.id = 'map'
@@ -43,7 +44,7 @@ function makeMap(latitude, longitude) {
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
-    console.log(map.closePopupOnClick);
+    //console.log(map.closePopupOnClick);
   }
 }
 
@@ -52,8 +53,9 @@ function makeMap(latitude, longitude) {
 export function DestroyMap() {
 
   if (map) {
-    mapElement.remove()
+   
     map.remove()
+    mapElement.remove()
     map = false
   }
 }
@@ -95,21 +97,23 @@ function createPopUp(latlng) {
 }
 
 function PopUpClose(e) {
-  console.log('pop close' + e);
-
+ 
   if (PopUp) {
     map.closePopup(PopUp);
     PopUp = false
-
   }
 }
 
 
 function MapPopupCallBack() {
-  console.log("pop up");
+  console.log("pop up callback");
+  
+  L.marker([popUpChords.lat, popUpChords.lng]).addTo(map).bindPopup("Saved Location");
+   
   PopUpClose()
-  var marker = L.marker([popUpChords.lat, popUpChords.lng]).addTo(map).bindPopup("Saved Location");
-  return popUpChords
+  DestroyMap()
+  updatePos(popUpChords)
+
 }
 
 
@@ -118,4 +122,6 @@ function moveMapToMarker(latitude, longitude) {
   longitude = 9.950001;
 
   map.setView([latitude, longitude], 13);
+
+
 }

@@ -10,6 +10,7 @@ import { ReadObject } from './modules/localstorage_object_module.js'
 
 let currentPositionData;
 let myAppElement = document.getElementById("app");
+let locationElement
 let myViewElement
 
 
@@ -27,22 +28,58 @@ function getLocation() {
 
 function positionSucces(position) {
 
-  getLocationName(position.coords.latitude, position.coords.longitude)
-    .then((data) => {
-      //console.log('pos succes: ' + data.display_name);
-
-      currentPositionData = {
-        lat: position.coords.latitude,
-        long: position.coords.longitude,
-        info: data
-      }
-
-      MakePollenView(position.coords.latitude, position.coords.longitude, myViewElement)
-    })
-
+ 
+  displayMyPos(position.coords.latitude, position.coords.longitude)
 }
 
 
+
+function displayMyPos(latitude,longitude){
+
+   getLocationName(latitude, longitude)
+    .then((data) => {
+      console.table(data);
+
+      currentPositionData = {
+        lat: latitude,
+        long: longitude,
+        info: data
+      }
+
+      if(data.address.hamlet){
+        locationElement.innerText=data.address.hamlet
+      }
+
+      else if(data.address.village){
+        locationElement.innerText=data.address.village
+      }
+
+      else if(data.address.town){
+        locationElement.innerText=data.address.town
+      }
+
+      else if(data.address.city){
+        locationElement.innerText=data.address.city
+      }
+      
+      
+      else if(data.address.suburb){
+        locationElement.innerText=data.address.suburb
+      }
+
+
+      else if(data.address.municipality){
+        locationElement.innerText=data.address.municipality
+      }
+     
+
+    
+
+
+
+      MakePollenView(latitude,longitude, myViewElement)
+    })
+}
 
 // statics
 function setUpApp() {
@@ -67,10 +104,14 @@ function MakeLandingPage(){
 
   console.log("setup app");
   // header
-  myAppElement.innerHTML = '<header><h1>Pollen Tracker</h1></header>';
-
-
  
+  let myHeader=document.createElement('header');
+
+  locationElement=document.createElement('h1');
+  locationElement.innerText='Pollen Tracker'
+
+myHeader.appendChild(locationElement)
+myAppElement.appendChild(myHeader)
 
 
   //view section
@@ -134,3 +175,8 @@ function navCallBack(e) {
 }
 
 
+
+export default function updatePos(position){
+console.log(position);
+displayMyPos(position.lat,position.lng)
+}
