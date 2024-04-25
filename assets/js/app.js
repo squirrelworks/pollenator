@@ -58,14 +58,16 @@ function displayMyPos(latitude,longitude){
         locationElement.innerText=data.address.town
       }
 
+      else if(data.address.suburb){
+        locationElement.innerText=data.address.suburb
+      }
+
       else if(data.address.city){
         locationElement.innerText=data.address.city
       }
       
       
-      else if(data.address.suburb){
-        locationElement.innerText=data.address.suburb
-      }
+    
 
 
       else if(data.address.municipality){
@@ -124,7 +126,7 @@ myAppElement.appendChild(myHeader)
  let navList = document.createElement('nav');
  navList.id = 'nav';
 
- let navItems = ['home', 'settings', 'map'];
+ let navItems = ['home', 'map', 'settings'];
 
  navItems.forEach(item => {
 
@@ -150,6 +152,7 @@ function navCallBack(e) {
 
     case "map":
       console.log("map");
+      locationElement.innerText='Kort'
       if (currentPositionData) {
         InitializeMap(currentPositionData.lat, currentPositionData.long, myViewElement)
       }
@@ -157,14 +160,17 @@ function navCallBack(e) {
       break;
     case "settings":
       console.log("settings");
+      locationElement.innerText='Settings'
       DestroyMap()
       MakeSettingsView(myViewElement)
 
       break;
     case "home":
       console.log("home");
+
       DestroyMap()
       if (currentPositionData) {
+        displayMyPos(currentPositionData.lat, currentPositionData.long)
         MakePollenView(currentPositionData.lat, currentPositionData.long, myViewElement)
       }
       break;
