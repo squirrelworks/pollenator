@@ -13,6 +13,9 @@ let myAppElement = document.getElementById("app");
 let locationElement
 let myViewElement
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
 
 setUpApp()
 getLocation();
