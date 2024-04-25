@@ -13,7 +13,7 @@ export default function MakeSettingsView(element) {
 
 
 
-    let myItems = ['Birk', 'Elm', 'Græs', 'ragweed'];
+    let myItems = ['Birk', 'Elm', 'Græs', 'Bynke'];
 
     myItems.map((item, index) => {
 
@@ -73,7 +73,7 @@ function checkboxCallback(e) {
         case "Græs":
             mySettings.grass = !mySettings.grass
             break;
-        case "ragweed":
+        case "Bynke":
             mySettings.ragweed = !mySettings.ragweed
             break;
 
