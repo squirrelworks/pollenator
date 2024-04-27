@@ -1,24 +1,25 @@
+import InitializeMap from "./modules/map_module.js";
+import { DestroyMap, currentLocation } from "./modules/map_module.js";
 
-import InitializeMap from './modules/map_module.js';
-import { DestroyMap } from './modules/map_module.js';
-import getLocationName from './modules/reverse_geolocation.js';
-import MakePollenView from './modules/pollen_view.js';
-import MakeSettingsView from './modules/settings_view.js'
-import SaveObject from './modules/localstorage_object_module.js'
-import { ReadObject } from './modules/localstorage_object_module.js'
+import GetLocationInfo from "./modules/reverse_geolocation.js";
+import MakePollenView from "./modules/pollen_view.js";
+import MakeSettingsView from "./modules/settings_view.js";
+import SaveObject from "./modules/localstorage_object_module.js";
+import { ReadObject } from "./modules/localstorage_object_module.js";
 
-
+let storedLocations;
 let currentPositionData;
-let myAppElement = document.getElementById("app");
-let locationElement
-let myViewElement
 
-if ('serviceWorker' in navigator) {
+let myAppElement = document.getElementById("app");
+let locationElement;
+let myViewElement;
+
+// pwa serviceworker
+if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js");
 }
 
-setUpApp()
-getLocation();
+setUpApp();
 
 // geolocation
 function getLocation() {
@@ -30,150 +31,138 @@ function getLocation() {
 }
 
 function positionSucces(position) {
+ 
 
-  displayMyPos(position.coords.latitude, position.coords.longitude)
-}
-
-
-
-function displayMyPos(latitude,longitude){
-
-   getLocationName(latitude, longitude)
-    .then((data) => {
-      //console.table(data);
-
+  GetLocationInfo(position.coords.latitude, position.coords.longitude).then(
+    (data) => {
       currentPositionData = {
-        lat: latitude,
-        long: longitude,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
         info: data
-      }
-
-      if(data.address.hamlet){
-        locationElement.innerText=data.address.hamlet
-      }
-
-      else if(data.address.village){
-        locationElement.innerText=data.address.village
-      }
-
-      else if(data.address.town){
-        locationElement.innerText=data.address.town
-      }
-
-      else if(data.address.suburb){
-        locationElement.innerText=data.address.suburb
-      }
-
-      else if(data.address.city){
-        locationElement.innerText=data.address.city
-      }
-      
-      
-    
-
-
-      else if(data.address.municipality){
-        locationElement.innerText=data.address.municipality
-      }
-     
-
-    
-
-
-
-      MakePollenView(latitude,longitude, myViewElement)
-    })
+      };
+      displayMyPos();
+    }
+  );
 }
+
+function displayMyPos() {
+ 
+
+  locationElement.innerText = currentPositionData.info.shortName;
+
+  storedLocations.locations.push(currentPositionData);
+  SaveObject(storedLocations, "storedLocations");
+
+  
+
+  MakePollenView(currentPositionData.lat,currentPositionData.lng,myViewElement);
+}
+
+
 
 // statics
 function setUpApp() {
+  console.log("setupApp");
 
-  let mySettings = ReadObject('userSettings')
+  let mySettings = ReadObject("userSettings");
 
   if (!mySettings) {
-    let mySettings={
+    let mySettings = {
       birch: true,
       alder: true,
       grass: true,
-      ragweed: true
-    }
+      ragweed: true,
+    };
 
-    SaveObject(mySettings,'userSettings')
-
+    SaveObject(mySettings, "userSettings");
   }
-  MakeLandingPage()
+
+  storedLocations = ReadObject("storedLocations");
+
+  if (!storedLocations) {
+    storedLocations = {
+      locations: [],
+    };
+  }
+
+  console.log("storedLocations: " + storedLocations);
+
+  SaveObject(storedLocations, "storedLocations");
+
+  getLocation();
+  MakeLandingPage();
 }
 
-function MakeLandingPage(){
-
+function MakeLandingPage() {
   console.log("setup app");
   // header
- 
-  let myHeader=document.createElement('header');
 
-  locationElement=document.createElement('h1');
-  locationElement.innerText='Pollen Tracker'
+  let myHeader = document.createElement("header");
 
-myHeader.appendChild(locationElement)
-myAppElement.appendChild(myHeader)
+  locationElement = document.createElement("h1");
+  locationElement.innerHTML = "Loading";
 
+  myHeader.appendChild(locationElement);
+  myAppElement.appendChild(myHeader);
 
   //view section
-  myViewElement = document.createElement('section');
-  myViewElement.id = 'ViewSection';
-  myAppElement.appendChild(myViewElement)
-  
+  myViewElement = document.createElement("section");
+  myViewElement.id = "ViewSection";
+  myAppElement.appendChild(myViewElement);
 
- // nav section
- let navList = document.createElement('nav');
- navList.id = 'nav';
+  // nav section
+  let navList = document.createElement("nav");
+  navList.id = "nav";
 
- let navItems = ['home', 'map', 'settings'];
+  let navItems = ["home", "map", "settings"];
 
- navItems.forEach(item => {
+  navItems.forEach((item) => {
+    let navItem = document.createElement("img");
 
-   let navItem = document.createElement('img');
+    navItem.src = `/assets/img/${item}.png`;
 
-   navItem.src = `/assets/img/${item}.png`;
+    navItem.setAttribute("data-path", item);
+    navItem.onclick = navCallBack;
+    navList.appendChild(navItem);
+  });
 
-   navItem.setAttribute("data-path", item);
-   navItem.onclick = navCallBack;
-   navList.appendChild(navItem)
-
- })
-
- myAppElement.appendChild(navList)
-
-
+  myAppElement.appendChild(navList);
 }
 
 // routing
 function navCallBack(e) {
-  let myNavItem = e.target.dataset.path
+  let myNavItem = e.target.dataset.path;
   switch (myNavItem) {
-
     case "map":
       console.log("map");
-      locationElement.innerText='Kort'
+      //myLocationName='Kort'
       if (currentPositionData) {
-        InitializeMap(currentPositionData.lat, currentPositionData.long, myViewElement)
+        InitializeMap(
+          currentPositionData.lat,
+          currentPositionData.lng,
+          myViewElement
+        );
       }
 
       break;
     case "settings":
       console.log("settings");
-      locationElement.innerText='Settings'
-      DestroyMap()
-      MakeSettingsView(myViewElement)
+      // myLocationName='Settings'
+      DestroyMap();
+      MakeSettingsView(myViewElement);
 
       break;
     case "home":
       console.log("home");
 
-      DestroyMap()
+      DestroyMap();
       if (currentPositionData) {
-        displayMyPos(currentPositionData.lat, currentPositionData.long)
-        MakePollenView(currentPositionData.lat, currentPositionData.long, myViewElement)
+        displayMyPos(currentPositionData.lat, currentPositionData.lng);
+        MakePollenView(
+          currentPositionData.lat,
+          currentPositionData.lng,
+          myViewElement
+        );
       }
       break;
 
@@ -182,8 +171,10 @@ function navCallBack(e) {
   }
 }
 
+export default function updatePos(locationData) {
+ 
 
+  currentPositionData = locationData;
 
-export default function updatePos(position){
-displayMyPos(position.lat,position.lng)
+  displayMyPos();
 }

@@ -51,7 +51,6 @@ header {
   grid-row-start: 2;
   grid-row-end: 3;
   text-align: center;
- /* contain: paint; */
  overflow: auto;
  
 }
@@ -76,10 +75,9 @@ nav {
   flex-direction: column;
   justify-content: space-around;
   padding: 20px;
-  
- height: 100%;
- 
 
+ 
+ 
 }
 
 

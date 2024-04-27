@@ -10,6 +10,8 @@ export default function MakePollenView(latitude, longitude, HtmlElement) {
   viewElement = HtmlElement;
   MakeLoadingIndicator(viewElement)
 
+ 
+
   getPollenData(latitude, longitude)
 }
 

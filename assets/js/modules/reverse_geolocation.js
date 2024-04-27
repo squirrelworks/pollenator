@@ -1,8 +1,11 @@
 
 
 
-export default async function getLocationName(lat, long) {
-  let myLocationInfo = fetch(
+
+
+
+export default async function GetLocationInfo(lat, long) {
+return fetch(
     `https://geocode.maps.co/reverse?lat=${lat}&lon=${long}&api_key=65fb5ea644244903025253axe09afbb`
   )
     .then((response) => {
@@ -13,16 +16,56 @@ export default async function getLocationName(lat, long) {
     })
     .then((data) => {
       // Handle the data
-      //console.log(data.display_name);
+  
+      
+      let shortName=GetShortLocationName(data)
+      data.shortName=shortName
+      //console.table(data);
       return data
-      //console.log(data.address.hamlet+' '+data.address.village);
+     
     })
     .catch((error) => {
       // Handle any errors that occurred during the fetch
       console.error("Fetch error:", error);
     });
+}
 
-  //console.log('from rev geo: '+myLocationInfo.display_name);
-  return myLocationInfo
+
+
+ function GetShortLocationName(data){
+
+let myLocationName=''
+
+      if(data.address.hamlet){
+        myLocationName=data.address.hamlet
+      }
+
+      else if(data.address.village){
+        myLocationName=data.address.village
+      }
+
+      else if(data.address.town){
+        myLocationName=data.address.town
+      }
+
+      else if(data.address.neighbourhood){
+        myLocationName=data.address.neighbourhood
+      }
+
+      else if(data.address.suburb){
+        myLocationName=data.address.suburb
+      }
+
+      else if(data.address.city){
+        myLocationName=data.address.city
+      }
+
+      else if(data.address.municipality){
+        myLocationName=data.address.municipality
+      }
+     
+ 
+
+return myLocationName
 
 }
