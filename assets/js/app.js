@@ -1,8 +1,9 @@
 import InitializeMap from "./modules/map_module.js";
-import { DestroyMap, currentLocation } from "./modules/map_module.js";
+import { DestroyMap, currentLocation,StoreLocation } from "./modules/map_module.js";
 
 import GetLocationInfo from "./modules/reverse_geolocation.js";
 import MakePollenView from "./modules/pollen_view.js";
+import {ToggleLocationList} from "./modules/pollen_view.js";
 import MakeSettingsView from "./modules/settings_view.js";
 import SaveObject from "./modules/localstorage_object_module.js";
 import { ReadObject } from "./modules/localstorage_object_module.js";
@@ -40,6 +41,8 @@ function positionSucces(position) {
         lng: position.coords.longitude,
         info: data
       };
+
+      StoreLocation(currentPositionData)
       displayMyPos();
     }
   );
@@ -47,14 +50,7 @@ function positionSucces(position) {
 
 function displayMyPos() {
  
-
   locationElement.innerText = currentPositionData.info.shortName;
-
-  storedLocations.locations.push(currentPositionData);
-  SaveObject(storedLocations, "storedLocations");
-
-  
-
   MakePollenView(currentPositionData.lat,currentPositionData.lng,myViewElement);
 }
 
@@ -85,9 +81,8 @@ function setUpApp() {
     };
   }
 
-  console.log("storedLocations: " + storedLocations);
-
   SaveObject(storedLocations, "storedLocations");
+
 
   getLocation();
   MakeLandingPage();
@@ -101,6 +96,7 @@ function MakeLandingPage() {
 
   locationElement = document.createElement("h1");
   locationElement.innerHTML = "Loading";
+  locationElement.addEventListener('click',ToggleLocationList)
 
   myHeader.appendChild(locationElement);
   myAppElement.appendChild(myHeader);
@@ -178,3 +174,6 @@ export default function updatePos(locationData) {
 
   displayMyPos();
 }
+
+
+

@@ -97,6 +97,13 @@ nav {
   max-height: 150px;
 }
 
+#locationList{
+  color: aliceblue;
+  background-color: #4BA598;
+  padding: 5px;
+
+}
+
 
 
 .settingsCard {
@@ -181,4 +188,8 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.hidden{
+  display: none;
 }

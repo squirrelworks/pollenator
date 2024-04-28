@@ -165,7 +165,7 @@ function MapPopupCallBack() {
 
     currentLocation=newLocation
 
-
+    StoreLocation(currentLocation)
     L.marker([currentLocation.lat, currentLocation.lng]).addTo(map).bindPopup(`${currentLocation.info.shortName}`);
   
   
@@ -194,23 +194,41 @@ function moveMapToMarker(latitude, longitude) {
 
 // stored Locations
 
-function GetStoredLocations() {
+export function GetStoredLocations() {
 
-  storedLocations = ReadObject('locations');
+  storedLocations = ReadObject('storedLocations');
   if (storedLocations) {
-    console.log('Stored Locations:', storedLocations);
+  
+    return storedLocations
   } else {
     storedLocations = [];
-    SaveObject(storedLocations, 'locations');
+    SaveObject(storedLocations, 'storedLocations');
   }
 }
 
 
-function StoreLocation(newLocation) {
+
+export function StoreLocation(newLocation) {
   
-  storedLocations = ReadObject('locations');
-  storedLocations.push(newLocation);
-  SaveObject(storedLocations, 'locations');
+  
+
+  storedLocations = ReadObject('storedLocations');
+
+  console.log('Stored Locations:', storedLocations);
+  let Found=false
+  storedLocations.locations.forEach((location)=>{
+
+
+
+if(newLocation.info.shortName==location.info.shortName){
+  Found=true
+}
+  })
+
+  if(!Found){
+  storedLocations.locations.push(newLocation);
+  SaveObject(storedLocations, 'storedLocations');
+  }
 }
 
 // local Storage
@@ -228,3 +246,5 @@ function SaveObject(basketData, itemName) {
   let myBasket = JSON.parse(mybasketstring)
   return myBasket
 }
+
+

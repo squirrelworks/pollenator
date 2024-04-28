@@ -1,7 +1,10 @@
 import MakeLoadingIndicator from './Loading_indicator.js'
 import { ReadObject } from './localstorage_object_module.js'
+import { GetStoredLocations } from "./map_module.js";
+import updatePos from '../app.js'; 
 
 let viewElement;
+let locationList
 
 
 
@@ -11,7 +14,6 @@ export default function MakePollenView(latitude, longitude, HtmlElement) {
   MakeLoadingIndicator(viewElement)
 
  
-
   getPollenData(latitude, longitude)
 }
 
@@ -42,10 +44,6 @@ function getPollenData(latitude, longitude) {
 
   return myData
 }
-
-
-
-
 
 
 function recivedData(data) {
@@ -101,8 +99,8 @@ function recivedData(data) {
 
 function buildPollenData(cards) {
 
-  let myHtml = "<section class='pollenView'>";
- 
+  let myHtml = "";
+  viewElement.innerHTML=""
 
   cards.forEach(card => {
 
@@ -115,10 +113,56 @@ function buildPollenData(cards) {
 
     myHtml += myCard
   });
-  myHtml+=`</section>`;
 
-  viewElement.innerHTML = myHtml
+
+
+  createLocationList()
+  let MyPollenVievElement=document.createElement("section");
+  MyPollenVievElement.classList.add('pollenView')
+  MyPollenVievElement.innerHTML=myHtml
+
+  viewElement.appendChild(MyPollenVievElement)
   viewElement.scrollTop = 0;
+  
 
 }
 
+
+function createLocationList(){
+
+  let storedLocations=GetStoredLocations();
+
+
+   locationList = document.createElement("section");
+  locationList.id = "locationList";
+  locationList.classList.add("hidden");
+  
+  storedLocations.locations.map((location,index) => {
+  
+    let myLocationElement=document.createElement("div");
+    myLocationElement.classList.add("location");
+    myLocationElement.setAttribute("data-index",index);
+    myLocationElement.addEventListener("click",LocationListCallback);
+    myLocationElement.innerText+= `${location.info.shortName}`
+    locationList.appendChild(myLocationElement);
+   
+  })
+  viewElement.appendChild(locationList)
+
+}
+
+
+function LocationListCallback(e){
+  let selectedIndex = e.target.getAttribute('data-index');
+  let storedLocations=GetStoredLocations();
+  let selectedLocation = storedLocations.locations[selectedIndex];
+
+   updatePos(selectedLocation) 
+  //MakePollenView(selectedLocation.lat,selectedLocation.lng,viewElement);
+}
+
+
+export function ToggleLocationList(){
+  locationList.classList.toggle('hidden')
+  
+}
