@@ -101,6 +101,16 @@ nav {
   color: aliceblue;
   background-color: #4BA598;
   padding: 5px;
+  padding-bottom: 1em;
+ width: 100%;
+  z-index: 3;
+  position: absolute;
+
+}
+
+#locationList div{
+  font-size: 1.5em;
+  margin-top: 1em;
 
 }
 
