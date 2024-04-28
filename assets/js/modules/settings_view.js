@@ -1,17 +1,21 @@
 import SaveObject from './localstorage_object_module.js'
 import { ReadObject } from './localstorage_object_module.js'
+import { GetStoredLocations,DeleteStoredLocation} from "./map_module.js";
 
 let mySettings;
+let locationList
+let settingsView
 
 export default function MakeSettingsView(element) {
+    settingsView = element  
     mySettings = ReadObject('userSettings')
 
-    element.innerHTML = ""
+    element.innerHTML = "" 
 
     let mySettingsElement = document.createElement('section');
     mySettingsElement.classList.add('settingsCard')
 
-
+    mySettingsElement.innerHTML ='<h3>Pollen typer</h3>'
 
     let myItems = ['Birk', 'Elm', 'Græs', 'Bynke'];
 
@@ -48,7 +52,9 @@ export default function MakeSettingsView(element) {
     })
 
     element.appendChild(mySettingsElement)
-    element.scrollTop = -1;
+    createLocationList(element)
+    element.scrollTop = 0;
+
 }
 
 function checkboxCallback(e) {
@@ -85,3 +91,46 @@ function checkboxCallback(e) {
 
     SaveObject(mySettings, "userSettings")
 }
+
+
+function createLocationList(){
+
+    let storedLocations=GetStoredLocations();
+  
+  
+    if (!locationList) {
+        locationList = document.createElement("section");
+        locationList.id='settingsLocationList'
+    }else{
+        locationList.innerHTML="" 
+    }
+   
+
+     locationList.innerHTML='<h3>Lokationer</h3>'
+    
+  
+    
+    storedLocations.locations.map((location,index) => {
+    
+      let myLocationElement=document.createElement("div");
+      myLocationElement.classList.add("settingsLocation");
+      myLocationElement.setAttribute("data-index",index);
+      myLocationElement.addEventListener("click",LocationListCallback);
+      myLocationElement.innerHTML+= `<div>${location.info.shortName}</div> <div>X</div>`
+      
+      locationList.appendChild(myLocationElement);
+     
+    })
+    settingsView.appendChild(locationList)
+  
+  }
+  
+  
+  function LocationListCallback(e){
+    let selectedIndex = e.target.getAttribute('data-index');
+    
+    DeleteStoredLocation(selectedIndex)
+   
+    createLocationList()
+   
+  }

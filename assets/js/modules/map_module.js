@@ -231,6 +231,12 @@ if(newLocation.info.shortName==location.info.shortName){
   }
 }
 
+export function DeleteStoredLocation(index){
+
+  storedLocations.locations.splice(index,1);
+  SaveObject(storedLocations,'storedLocations');
+}
+
 // local Storage
 
 function SaveObject(basketData, itemName) {

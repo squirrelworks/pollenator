@@ -50,8 +50,12 @@ header {
 #ViewSection {
   grid-row-start: 2;
   grid-row-end: 3;
-  
+ 
  overflow: auto;
+
+ display: flex;
+ flex-direction: column;
+ align-items: center;
  
 }
 
@@ -107,6 +111,10 @@ max-width: 500px;
 
 }
 
+
+
+
+
 #locationList div{
   font-size: 1.5em;
   margin-top: 1em;
@@ -116,15 +124,21 @@ max-width: 500px;
 
 
 .settingsCard {
- height: 100%;
+width: 80%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: 20px;
- 
+  margin-top: 1em;
 }
-.settingsCard div {
 
+.settingsCard h3 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+
+.settingsCard div {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -133,6 +147,36 @@ max-width: 500px;
 .settingsCard p {
   display: inline-block;
 }
+
+#settingsLocationList{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 20px;
+ 
+  margin-top: 1em;
+
+}
+
+#settingsLocationList h3 {
+ 
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.settingsLocation{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: #4BA598;
+  color: aliceblue;
+  padding: 20px;
+}
+
+
+
+
 
 /*   switch '/
 
