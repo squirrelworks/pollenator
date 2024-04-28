@@ -121,8 +121,7 @@ let myCard=document.createElement("section");
 myCard.classList.add("pollencard");
 
 myCard.innerHTML=pollenIndicator
-myCard.querySelector(`[id='name']`).textContent=card.name
-myCard.querySelector(`[id='number']`).textContent=card.number
+
 
 console.log(myCard.querySelector(`[id='${card.name}']`).style.visibility);
 
@@ -134,12 +133,23 @@ if(card.number>100){
   mySeverity='high'
 } else if(card.number>50){
   mySeverity='moderate'
-} else {
+} else if(card.number>1) {
   mySeverity='low'
+
+} else  {
+  mySeverity='no data'
 
 }
 
-myCard.querySelector(`[id='${mySeverity}']`).style.visibility='visible'
+myCard.querySelector(`[id='name']`).textContent=card.name
+myCard.querySelector(`[id='number']`).textContent=card.number
+
+
+if(mySeverity!='no data'){
+ 
+  myCard.querySelector(`[id='${mySeverity}']`).style.visibility='visible'
+}
+
 MyPollenVievElement.appendChild(myCard)
 
   });
