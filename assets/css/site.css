@@ -85,11 +85,10 @@ nav {
 .pollencard {
   display: flex;
   flex-direction: row;
-  margin-top: 20px;
+
   padding: 5px;
   
-  border: 3px solid #50B8AE;
-  border-radius: 10px;
+ 
 
 }
 
