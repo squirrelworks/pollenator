@@ -54,7 +54,16 @@ GetStoredLocations()
 
 function makeMap(latitude, longitude) {
   if (!map) {
-    map = L.map("map").setView([latitude, longitude], 13);
+
+
+    let mapOptions = {
+      center: [latitude, longitude],
+      zoom: 15,
+      zoomControl: false
+   }
+
+   
+    map = new L.map('map', mapOptions);
 
    
     L.marker([latitude, longitude]).addTo(map).bindPopup(currentLocation.info.shortName);
@@ -62,16 +71,18 @@ function makeMap(latitude, longitude) {
     map.on("click", onMapClick);
 
     map.on("popupclose", PopUpCancled);
+   
     
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
     //console.log(map.closePopupOnClick);
   }
+
 }
 
 
