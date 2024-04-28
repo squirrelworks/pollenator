@@ -50,7 +50,7 @@ header {
 #ViewSection {
   grid-row-start: 2;
   grid-row-end: 3;
-  text-align: center;
+  
  overflow: auto;
  
 }
@@ -71,34 +71,34 @@ nav {
 
 
 .pollenView{
+
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-around;
-  padding: 20px;
-
- 
+  align-content:space-around;
  
 }
 
 
+.pollencard{
+ width: 49%;
+max-width: 500px;
+}
 
-.pollencard {
-  display: flex;
-  flex-direction: row;
+.pollenIndicator{
 
-  padding: 5px;
-  
+  width: 100%;
+
  
 
 }
 
-.pollencard img{
-  max-height: 150px;
-}
+
 
 #locationList{
   color: aliceblue;
   background-color: #4BA598;
+
   padding: 5px;
   padding-bottom: 1em;
  width: 100%;

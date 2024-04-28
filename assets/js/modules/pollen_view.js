@@ -5,6 +5,7 @@ import updatePos from '../app.js';
 
 let viewElement;
 let locationList
+let MyPollenVievElement
 
 
 
@@ -13,8 +14,6 @@ let locationList
 
 export default function MakePollenView(latitude, longitude, HtmlElement) {
   viewElement = HtmlElement;
- 
-  
  
  // console.log(pollenIndicator);
 
@@ -106,20 +105,17 @@ function recivedData(data) {
 
 function buildPollenData(cards) {
 
-  let myHtml = "";
   viewElement.innerHTML=""
+  createLocationList()
+
+   MyPollenVievElement=document.createElement("section");
+   MyPollenVievElement.classList.add('pollenView')
+
+
   let pollenIndicator=getSvgIndicator()
 
   cards.forEach(card => {
 
-   /*  let myCard = `<section class="pollencard">
-    <section><img src="./assets/img/${card.icon}"></section>
-    <section>
-    <h3>${card.name}<h3><p>${card.number}</p>
-    </section>
-    </section>`
-
-    myHtml += myCard */
 let myCard=document.createElement("section");
 
 myCard.classList.add("pollencard");
@@ -143,34 +139,15 @@ if(card.number>100){
 
 }
 
-
 myCard.querySelector(`[id='${mySeverity}']`).style.visibility='visible'
-
-
-
-
-//console.log(document.querySelector(`#${card.name}`));
-
-
-
-//document.getElementById(card.name).style.display="block";
-
-
-
-viewElement.appendChild(myCard)
+MyPollenVievElement.appendChild(myCard)
 
   });
 
 
 
-  createLocationList()
-  let MyPollenVievElement=document.createElement("section");
-  MyPollenVievElement.classList.add('pollenView')
-  MyPollenVievElement.innerHTML=myHtml
-
   viewElement.appendChild(MyPollenVievElement)
   viewElement.scrollTop = 0;
-  
 
 }
 
@@ -219,8 +196,13 @@ export function ToggleLocationList(){
 function getSvgIndicator() {
   return `<?xml version="1.0" encoding="utf-8"?>
   <!-- Generator: Adobe Illustrator 28.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-  <svg version="1.1" id="pollenIndicator" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px" width="600px" height="800px" viewBox="0 0 600 800" enable-background="new 0 0 600 800" xml:space="preserve">
+  <svg version="1.1" class="pollenIndicator" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+    viewBox="0 0 600 800" enable-background="new 0 0 600 800" xml:space="preserve">
+    <path id="bg"  fill="#bdbdbd" d="M207,564.5c-2.1,0-4.3-0.5-6.3-1.4c-40-18.6-73.8-48.1-97.9-85.2C78,439.8,64.9,395.6,64.9,350
+    c0-62.8,24.4-121.8,68.8-166.2c44.4-44.4,103.4-68.8,166.2-68.8c62.8,0,121.8,24.4,166.2,68.8c44.4,44.4,68.8,103.4,68.8,166.2
+    c0,45.2-12.9,89.1-37.2,126.9c-23.7,36.8-57.1,66.3-96.5,85.2c-7.5,3.6-16.4,0.4-20-7.1c-3.6-7.5-0.4-16.4,7.1-20
+    c70.9-33.9,116.6-106.5,116.6-185c0-113-92-205-205-205s-205,92-205,205c0,79.3,46.5,152.3,118.5,185.9c7.5,3.5,10.8,12.4,7.3,19.9
+    C218.1,561.3,212.7,564.5,207,564.5z"/>
   <path id="high" visibility="hidden" fill="#FF0000" d="M207,564.5c-2.1,0-4.3-0.5-6.3-1.4c-40-18.6-73.8-48.1-97.9-85.2C78,439.8,64.9,395.6,64.9,350
     c0-62.8,24.4-121.8,68.8-166.2c44.4-44.4,103.4-68.8,166.2-68.8c62.8,0,121.8,24.4,166.2,68.8c44.4,44.4,68.8,103.4,68.8,166.2
     c0,45.2-12.9,89.1-37.2,126.9c-23.7,36.8-57.1,66.3-96.5,85.2c-7.5,3.6-16.4,0.4-20-7.1c-3.6-7.5-0.4-16.4,7.1-20
