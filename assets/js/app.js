@@ -7,6 +7,7 @@ import {ToggleLocationList} from "./modules/pollen_view.js";
 import MakeSettingsView from "./modules/settings_view.js";
 import SaveObject from "./modules/localstorage_object_module.js";
 import { ReadObject } from "./modules/localstorage_object_module.js";
+import SetupSwipe from "./modules/swipe_module.js";
 
 let storedLocations;
 let currentPositionData;
@@ -123,6 +124,7 @@ function MakeLandingPage() {
   });
 
   myAppElement.appendChild(navList);
+  SetupSwipe(myAppElement)
 }
 
 // routing
