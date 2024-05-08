@@ -176,4 +176,16 @@ export default function updatePos(locationData) {
 }
 
 
+// visible test
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+  
+    getLocation()
+  } else {
+    
+  }
+});
+
+
 
