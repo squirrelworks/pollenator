@@ -1,6 +1,13 @@
 
 export default function MakeLoadingIndicator(element) {
-    element.innerHTML = '<h2>Loading...</h2>'
+
+
+    
+    element.innerHTML = '<div class="loader"></div>'
+
+    
+
+   
 
 }
 
