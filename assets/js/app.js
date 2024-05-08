@@ -54,7 +54,9 @@ function positionSucces(position) {
 
 function displayMyPos() {
  
+  myPageIndex=0
   locationElement.innerText = currentPositionData.info.shortName;
+
   MakePollenView(currentPositionData.lat,currentPositionData.lng,myViewElement);
 }
 
