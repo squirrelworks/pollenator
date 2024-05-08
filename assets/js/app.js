@@ -180,7 +180,7 @@ export default function updatePos(locationData) {
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
-  alert("hi")
+ 
     getLocation()
   } else {
     
