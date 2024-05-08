@@ -1,23 +1,34 @@
+import {swipeCallback} from '../app.js'; 
+
+
 let touchstartX = 0;
 let touchstartY = 0;
 let touchendX = 0;
 let touchendY = 0;
 
+let gesuredZone
+
 
 export default function SetupSwipe(element){
-    var gesuredZone =element// document.getElementById('gesuredZone');
+     gesuredZone =element// document.getElementById('gesuredZone');
+console.log('setup swipe');
+//swipeCallback('setup!!!!!!!!!!!!')
 
-    gesuredZone.addEventListener('touchstart', function(event) {
-        touchstartX = event.screenX;
-        touchstartY = event.screenY;
-    }, false);
+     gesuredZone.addEventListener('touchstart', function(event) {
+      
+        touchstartX = event.targetTouches[0].screenX;
+        touchstartY = event.targetTouches[0].screenY;
+        //console.log( touchstartX,touchstartY);
+    });
     
     
     gesuredZone.addEventListener('touchend', function(event) {
-        touchendX = event.screenX;
-        touchendY = event.screenY;
+     
+        touchendX = event.changedTouches[0].screenX;
+        touchendY = event.changedTouches[0].screenY;
+      
         handleGesure();
-    }, false); 
+    }); 
 
 }
 
@@ -25,7 +36,7 @@ export default function SetupSwipe(element){
 
 
 function handleGesure() { 
-    
+   
 let swiped = 'swiped: ';
 
 let xDist=Math.abs(touchendX-touchstartX)
@@ -37,24 +48,30 @@ if (touchendX < touchstartX) {
   
 
   if(xDist > yDist){
-    alert(swiped + 'left!');
+  
+    swipeCallback('left');
+
   }
   
 }
   else{
     if(xDist > yDist){
-      alert(swiped + 'right!');
+      
+      swipeCallback('right');
+      
     }
   }
 
 
   if (touchendY < touchstartY) {
   if(yDist > xDist){
-    alert(swiped + 'up!');
+   
+    swipeCallback('up');
   }
 }else{
     if(yDist > xDist){
-        alert(swiped + 'down!');
+      
+      swipeCallback('down');
     }
 }
 }

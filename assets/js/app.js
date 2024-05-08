@@ -90,7 +90,7 @@ function setUpApp() {
 }
 
 function MakeLandingPage() {
-  console.log("setup app");
+  console.log("MakeLandingPage");
   // header
 
   let myHeader = document.createElement("header");
@@ -178,6 +178,27 @@ export default function updatePos(locationData) {
 }
 
 
+export function swipeCallback(swipeDirection) {
+ 
+switch (swipeDirection) {
+    case 'left':
+     
+      break;
+    case 'right':
+     
+      break;
+    case 'up':
+     
+      break;
+      case 'down':
+        getLocation()
+        break;
+    default:
+      break;
+  }
+}
+
+
 // visible test
 
 document.addEventListener("visibilitychange", () => {
@@ -188,6 +209,8 @@ document.addEventListener("visibilitychange", () => {
     
   }
 });
+
+
 
 
 
