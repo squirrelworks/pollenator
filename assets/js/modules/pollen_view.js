@@ -20,7 +20,32 @@ export default function MakePollenView(latitude, longitude, HtmlElement) {
   MakeLoadingIndicator(viewElement)
 
 
-  getPollenData(latitude, longitude)
+  //getPollenData(latitude, longitude)
+
+
+  //test
+  const promises = [ getPollenData(latitude, longitude), 
+    new Promise((resolve) => 
+        setTimeout(() => resolve("second"), 1000)), 
+]; 
+  
+// Use Promise.all to wait  
+// for all promises to resolve 
+  
+Promise.all(promises) 
+    .then((result) => { 
+        console.log("All promises have been resolved ", result[0]); 
+  
+        // Handle the resolved values here 
+        recivedData(result[0])
+       
+    }) 
+    .catch((error) => { 
+        console.error( 
+            "At least any one promise is rejected:", error); 
+    });
+
+
 }
 
 function getPollenData(latitude, longitude) {
@@ -31,7 +56,7 @@ function getPollenData(latitude, longitude) {
 
   let myUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=alder_pollen,birch_pollen,grass_pollen,ragweed_pollen&hourly=alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,ragweed_pollen&timezone=Europe%2FBerlin&domains=cams_europe`;
 
-  let myData = fetch(myUrl)
+  return  fetch(myUrl)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -40,15 +65,14 @@ function getPollenData(latitude, longitude) {
     })
     .then((data) => {
 
-      recivedData(data)
-
+     // recivedData(data)
+     return data
     })
     .catch((error) => {
       // Handle any errors that occurred during the fetch
       console.error("Fetch error:", error);
     });
 
-  return myData
 }
 
 
