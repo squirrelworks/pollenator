@@ -204,24 +204,33 @@ export default function updatePos(locationData) {
 
 export function swipeCallback(swipeDirection) {
  
+
+  if (myPageIndex!=1) {
+
   let myIndex=0
+
 
 switch (swipeDirection) {
     case 'right':
       myIndex=myPageIndex-1
-     if (myPageIndex<0) {
+      console.log('swipe right');
+
+     if (myIndex<0) {
+      console.log('below 0');
        myIndex=myPages.length-1
-      
      }
-     pageNavigator(myPages[myIndex])
+     myPageIndex=myIndex
+     pageNavigator(myPages[myPageIndex])
 
       break;
     case 'left':
          myIndex=myPageIndex+1
-     if (myPageIndex>myPages.length-1) {
+
+     if (myIndex>myPages.length-1) {
        myIndex=0
      }
-     pageNavigator(myPages[myIndex])
+ myPageIndex=myIndex
+     pageNavigator(myPages[myPageIndex])
       break;
     case 'up':
      
@@ -235,6 +244,7 @@ switch (swipeDirection) {
     default:
       break;
   }
+}
 }
 
 
