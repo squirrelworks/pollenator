@@ -24,21 +24,37 @@ export default function SetupSwipe(element){
 
 
 
-function handleGesure() {
-    let swiped = 'swiped: ';
-    if (touchendX < touchstartX) {
-        alert(swiped + 'left!');
+function handleGesure() { 
+    
+let swiped = 'swiped: ';
+
+let xDist=Math.abs(touchendX-touchstartX)
+let yDist=Math.abs(touchendY-touchstartY)
+
+
+
+if (touchendX < touchstartX) {
+  
+
+  if(xDist > yDist){
+    alert(swiped + 'left!');
+  }
+  
+}
+  else{
+    if(xDist > yDist){
+      alert(swiped + 'right!');
     }
-    if (touchendX > touchstartX) {
-        alert(swiped + 'right!');
-    }
-    if (touchendY < touchstartY) {
+  }
+
+
+  if (touchendY < touchstartY) {
+  if(yDist > xDist){
+    alert(swiped + 'up!');
+  }
+}else{
+    if(yDist > xDist){
         alert(swiped + 'down!');
     }
-    if (touchendY > touchstartY) {
-        alert(swiped + 'left!');
-    }
-    if (touchendY == touchstartY) {
-        alert('tap!');
-    }
+}
 }
