@@ -1,7 +1,7 @@
 import MakeLoadingIndicator from './Loading_indicator.js'
 import { ReadObject } from './localstorage_object_module.js'
 import { GetStoredLocations } from "./map_module.js";
-import updatePos from '../app.js'; 
+import updatePos from '../app.js';
 
 let viewElement;
 let locationList
@@ -14,12 +14,12 @@ let MyPollenVievElement
 
 export default function MakePollenView(latitude, longitude, HtmlElement) {
   viewElement = HtmlElement;
- 
- // console.log(pollenIndicator);
+
+  // console.log(pollenIndicator);
 
   MakeLoadingIndicator(viewElement)
 
- 
+
   getPollenData(latitude, longitude)
 }
 
@@ -105,52 +105,52 @@ function recivedData(data) {
 
 function buildPollenData(cards) {
 
-  viewElement.innerHTML=""
+  viewElement.innerHTML = ""
   createLocationList()
 
-   MyPollenVievElement=document.createElement("section");
-   MyPollenVievElement.classList.add('pollenView')
+  MyPollenVievElement = document.createElement("section");
+  MyPollenVievElement.classList.add('pollenView')
 
 
-  let pollenIndicator=getSvgIndicator()
+  let pollenIndicator = getSvgIndicator()
 
   cards.forEach(card => {
 
-let myCard=document.createElement("section");
+    let myCard = document.createElement("section");
 
-myCard.classList.add("pollencard");
+    myCard.classList.add("pollencard");
 
-myCard.innerHTML=pollenIndicator
-
-
-console.log(myCard.querySelector(`[id='${card.name}']`).style.visibility);
-
-myCard.querySelector(`[id='${card.name}']`).style.visibility='visible'
-
-let mySeverity='moderate'
-
-if(card.number>100){
-  mySeverity='high'
-} else if(card.number>50){
-  mySeverity='moderate'
-} else if(card.number>1) {
-  mySeverity='low'
-
-} else  {
-  mySeverity='no data'
-
-}
-
-myCard.querySelector(`[id='name']`).textContent=card.name
-myCard.querySelector(`[id='number']`).textContent=card.number
+    myCard.innerHTML = pollenIndicator
 
 
-if(mySeverity!='no data'){
- 
-  myCard.querySelector(`[id='${mySeverity}']`).style.visibility='visible'
-}
+    console.log(myCard.querySelector(`[id='${card.name}']`).style.visibility);
 
-MyPollenVievElement.appendChild(myCard)
+    myCard.querySelector(`[id='${card.name}']`).style.visibility = 'visible'
+
+    let mySeverity = 'moderate'
+
+    if (card.number > 100) {
+      mySeverity = 'high'
+    } else if (card.number > 50) {
+      mySeverity = 'moderate'
+    } else if (card.number > 0) {
+      mySeverity = 'low'
+
+    } else {
+      mySeverity = 'no data'
+
+    }
+
+    myCard.querySelector(`[id='name']`).textContent = card.name
+    myCard.querySelector(`[id='number']`).textContent = card.number
+
+
+    if (mySeverity != 'no data') {
+
+      myCard.querySelector(`[id='${mySeverity}']`).style.visibility = 'visible'
+    }
+
+    MyPollenVievElement.appendChild(myCard)
 
   });
 
@@ -164,43 +164,43 @@ MyPollenVievElement.appendChild(myCard)
 
 
 
-function createLocationList(){
+function createLocationList() {
 
-  let storedLocations=GetStoredLocations();
+  let storedLocations = GetStoredLocations();
 
 
-   locationList = document.createElement("section");
+  locationList = document.createElement("section");
   locationList.id = "locationList";
   locationList.classList.add("hidden");
-  
-  storedLocations.locations.map((location,index) => {
-  
-    let myLocationElement=document.createElement("div");
+
+  storedLocations.locations.map((location, index) => {
+
+    let myLocationElement = document.createElement("div");
     myLocationElement.classList.add("location");
-    myLocationElement.setAttribute("data-index",index);
-    myLocationElement.addEventListener("click",LocationListCallback);
-    myLocationElement.innerText+= `${location.info.shortName}`
+    myLocationElement.setAttribute("data-index", index);
+    myLocationElement.addEventListener("click", LocationListCallback);
+    myLocationElement.innerText += `${location.info.shortName}`
     locationList.appendChild(myLocationElement);
-   
+
   })
   viewElement.appendChild(locationList)
 
 }
 
 
-function LocationListCallback(e){
+function LocationListCallback(e) {
   let selectedIndex = e.target.getAttribute('data-index');
-  let storedLocations=GetStoredLocations();
+  let storedLocations = GetStoredLocations();
   let selectedLocation = storedLocations.locations[selectedIndex];
 
-   updatePos(selectedLocation) 
+  updatePos(selectedLocation)
   //MakePollenView(selectedLocation.lat,selectedLocation.lng,viewElement);
 }
 
 
-export function ToggleLocationList(){
+export function ToggleLocationList() {
   locationList.classList.toggle('hidden')
-  
+
 }
 
 function getSvgIndicator() {
