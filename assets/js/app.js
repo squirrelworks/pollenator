@@ -16,6 +16,9 @@ let myAppElement = document.getElementById("app");
 let locationElement;
 let myViewElement;
 
+const myPages=['home','map','settings']
+let myPageIndex=0;
+
 // pwa serviceworker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js");
@@ -85,6 +88,8 @@ function setUpApp() {
   SaveObject(storedLocations, "storedLocations");
 
 
+
+   myPageIndex=0;
   getLocation();
   MakeLandingPage();
 }
@@ -130,10 +135,23 @@ function MakeLandingPage() {
 // routing
 function navCallBack(e) {
   let myNavItem = e.target.dataset.path;
+  pageNavigator(myNavItem)
+}
+
+
+function pageNavigator(myNavItem){
+
+
+
+myPageIndex=myPages.indexOf(myNavItem)
+
+console.log(`side: ${myNavItem} index: ${myPageIndex}`);
+
   switch (myNavItem) {
     case "map":
       console.log("map");
       //myLocationName='Kort'
+ 
       if (currentPositionData) {
         InitializeMap(
           currentPositionData.lat,
@@ -169,6 +187,12 @@ function navCallBack(e) {
   }
 }
 
+
+
+
+
+
+
 export default function updatePos(locationData) {
  
 
@@ -180,18 +204,33 @@ export default function updatePos(locationData) {
 
 export function swipeCallback(swipeDirection) {
  
+  let myIndex=0
+
 switch (swipeDirection) {
-    case 'left':
-     
-      break;
     case 'right':
-     
+      myIndex=myPageIndex-1
+     if (myPageIndex<0) {
+       myIndex=myPages.length-1
+      
+     }
+     pageNavigator(myPages[myIndex])
+
+      break;
+    case 'left':
+         myIndex=myPageIndex+1
+     if (myPageIndex>myPages.length-1) {
+       myIndex=0
+     }
+     pageNavigator(myPages[myIndex])
       break;
     case 'up':
      
       break;
       case 'down':
-        getLocation()
+        if (myPageIndex==0) {
+           getLocation()
+        }
+      
         break;
     default:
       break;
